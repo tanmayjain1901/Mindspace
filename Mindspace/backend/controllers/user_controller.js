@@ -1,38 +1,37 @@
+
 import consultationModel from "../models/consultation_model.js";
 import userModel from "../models/user_model.js";
 import doctorModel from "../models/doctor_model.js";
 import feelingModel from "../models/feelings_model.js";
 import { fetchConversations } from "../utilities/conversation_utils.js";
 
-
 export const createConsultation = async function (req, res) {
   try {
     const { doctor, user } = req.body;
-
     const newConsultation = await consultationModel.create({
-      doctor,
-      user,
+      doctor: doctor.toString(),
+      user: user.toString(),
     });
 
-    const currUser = await userModel.findOne({ _id: user });
+    const currUser = await userModel.findOne({ _id: user.toString() });
     if (!currUser) {
       return res
         .status(400)
         .send({ success: false, message: "User not found" });
     }
 
-    const currDoctor = await doctorModel.findOne({ _id: doctor });
+    const currDoctor = await doctorModel.findOne({ _id: doctor.toString() });
     if (!currDoctor) {
       return res
         .status(400)
         .send({ success: false, message: "Doctor not found" });
     }
 
-    currUser.consultations.push(newConsultation._id);
-    currUser.consulteddoctors.push(doctor);
+    currUser.consultations?.push(newConsultation._id);
+    currUser.consulteddoctors?.push(doctor);
     await currUser.save();
 
-    currDoctor.consultations.push(newConsultation._id);
+    currDoctor.consultations?.push(newConsultation._id);
     await currDoctor.save();
 
     res.status(201).send({
@@ -53,7 +52,7 @@ export const addQuestion = async function (req, res) {
     const { description, consultation } = req.body;
 
     const myConsultation = await consultationModel.findOne({
-      _id: consultation,
+      _id: consultation.toString(),
     });
     if (!myConsultation) {
       return res
@@ -68,7 +67,7 @@ export const addQuestion = async function (req, res) {
       type,
     };
 
-    myConsultation.conversation.push(question);
+    myConsultation.conversation?.push(question);
 
     await myConsultation.save();
 
@@ -87,17 +86,20 @@ export const getConsultations = async function (req, res) {
     const { userid } = req.params;
 
     const currUser = await userModel
-      .findById({ _id: userid })
-      .populate({path: "consultations", select: "-conversation", populate: {
-        path: "doctor",
-        model: "Doctor",
-        select: "-consultations"
-      }});
+      .findById({ _id: userid.toString() })
+      .populate({
+        path: "consultations",
+        select: "-conversation",
+        populate: {
+          path: "doctor",
+          model: "Doctor",
+          select: "-consultations"
+        }
+      });
 
     if (
       !currUser ||
-      !currUser.consultations ||
-      currUser.consultations.length === 0
+      !currUser.consultations?.length
     ) {
       return res
         .status(404)
@@ -117,10 +119,9 @@ export const getConsultations = async function (req, res) {
 export const getAllDoctors = async function (req, res) {
   try {
 
-
     const allDoctors = await doctorModel.find().select("-password");
 
-    if (!allDoctors || allDoctors.length === 0) {
+    if (!allDoctors || !allDoctors?.length) {
       return res
         .status(404)
         .send({ success: false, message: "Doctors not found" });
@@ -136,7 +137,7 @@ export const getAllDoctors = async function (req, res) {
   }
 };
 
-export const getConversations = fetchConversations;
+export { fetchConversations as getConversations };
 
 export const addFeeling = async function (req, res) {
   try {
@@ -150,10 +151,10 @@ export const addFeeling = async function (req, res) {
 
     const newFeeling = await feelingModel.create({
       description,
-      user,
+      user: user.toString(),
     });
 
-    const myUser = await userModel.findById(user);
+    const myUser = await userModel.findById(user.toString());
 
     if (!myUser) {
       return res
@@ -161,7 +162,7 @@ export const addFeeling = async function (req, res) {
         .send({ success: false, message: "User not found" });
     }
 
-    myUser.feelings.push(newFeeling._id);
+    myUser.feelings?.push(newFeeling._id);
 
     await myUser.save();
 
@@ -180,11 +181,11 @@ export const getFeelings = async function (req, res) {
     const { user } = req.params;
 
     const myFeelings = await feelingModel
-      .find({ user: user })
+      .find({ user: user.toString() })
       .select("description date")
       .sort({ createdAt: -1 });
 
-    if (!myFeelings || myFeelings.length === 0) {
+    if (!myFeelings || !myFeelings?.length) {
       return res
         .status(404)
         .send({ success: false, message: "Feelings not found" });
@@ -201,35 +202,3 @@ export const getFeelings = async function (req, res) {
     res.status(500).send({ success: false, message: err.message });
   }
 };
-
-//To be removed.....
-// export const createUser = async (req, res) => {
-//   try {
-//     const { email, username } = req.body;
-
-//     if (!email || !username) {
-//       return res.status(400).send({
-//         success: false,
-//         message: "Email and username are required",
-//       });
-//     }
-
-//     const newUser = await userModel.create({
-//       email,
-//       username,
-//       created_at: new Date(),  // optional
-//       last_sign_at: new Date(), // optional
-//     });
-
-//     res.status(201).send({
-//       success: true,
-//       message: "User created successfully",
-//       user: newUser,
-//     });
-//   } catch (err) {
-//     res.status(500).send({
-//       success: false,
-//       message: err.message,
-//     });
-//   }
-// };
