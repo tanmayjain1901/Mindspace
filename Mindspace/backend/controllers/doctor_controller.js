@@ -3,8 +3,6 @@ import consultationModel from "../models/consultation_model.js";
 import {fetchConversations}  from "../utilities/conversation_utils.js"
 
 
-
-
 //Single method to get doctor profile as well as his consultation list
 export const getDoctor = async function (req, res) {
   try {
@@ -108,7 +106,7 @@ export const getStats = async function (req, res) {
   }
 };
 
-export const getConversations = fetchConversations;
+export { fetchConversations as getConversations };
 
 // export const createDoctor = async (req, res) => {
 //   try {
@@ -118,7 +116,7 @@ export const getConversations = fetchConversations;
 //     if (!username || !email || !password || !fullname) {
 //       return res.status(400).send({
 //         success: false,
-//         message: "Username, email, and password are required.",
+//         message: "Username, email, and password are required."
 //       });
 //     }
 
@@ -127,7 +125,7 @@ export const getConversations = fetchConversations;
 //     if (existingDoctor) {
 //       return res.status(409).send({
 //         success: false,
-//         message: "Doctor with this email or username already exists.",
+//         message: "Doctor with this email or username already exists."
 //       });
 //     }
 
@@ -152,7 +150,3 @@ export const getConversations = fetchConversations;
 //     });
 //   }
 // };
-
-
-
-
