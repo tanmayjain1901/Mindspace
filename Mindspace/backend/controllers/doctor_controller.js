@@ -1,7 +1,6 @@
 import doctorModel from "../models/doctor_model.js";
 import consultationModel from "../models/consultation_model.js";
-import {fetchConversations}  from "../utilities/conversation_utils.js"
-
+import { fetchConversations } from "../utilities/conversation_utils.js";
 
 //Single method to get doctor profile as well as his consultation list
 export const getDoctor = async function (req, res) {
@@ -23,8 +22,7 @@ export const getDoctor = async function (req, res) {
         .send({ success: false, message: "Doctor not found" });
     }
 
-    if(!doctor.consultations || doctor.consultations.length === 0)
-    {
+    if (!doctor.consultations || doctor.consultations.length === 0) {
       return res
         .status(404)
         .send({ success: false, message: "No consultations found" });
@@ -106,7 +104,7 @@ export const getStats = async function (req, res) {
   }
 };
 
-export { fetchConversations as getConversations };
+export { fetchConversations as getConversations } from "../utilities/conversation_utils.js";
 
 // export const createDoctor = async (req, res) => {
 //   try {
