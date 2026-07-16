@@ -1,4 +1,3 @@
-
 import consultationModel from "../models/consultation_model.js";
 import userModel from "../models/user_model.js";
 import doctorModel from "../models/doctor_model.js";
@@ -99,7 +98,7 @@ export const getConsultations = async function (req, res) {
 
     if (
       !currUser ||
-      !currUser.consultations?.length
+      !currUser?.consultations?.length
     ) {
       return res
         .status(404)
