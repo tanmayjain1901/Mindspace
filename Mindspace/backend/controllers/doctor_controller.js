@@ -1,3 +1,4 @@
+
 import doctorModel from "../models/doctor_model.js";
 import consultationModel from "../models/consultation_model.js";
 import { fetchConversations } from "../utilities/conversation_utils.js";
@@ -104,7 +105,7 @@ export const getStats = async function (req, res) {
   }
 };
 
-export { fetchConversations as getConversations } from "../utilities/conversation_utils.js";
+export { fetchConversations } from "../utilities/conversation_utils.js";
 
 // export const createDoctor = async (req, res) => {
 //   try {
