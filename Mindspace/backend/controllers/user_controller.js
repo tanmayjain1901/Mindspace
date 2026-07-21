@@ -136,7 +136,7 @@ export const getAllDoctors = async function (req, res) {
   }
 };
 
-export { fetchConversations as getConversations };
+export { fetchConversations as getConversations } from "../utilities/conversation_utils.js";
 
 export const addFeeling = async function (req, res) {
   try {
