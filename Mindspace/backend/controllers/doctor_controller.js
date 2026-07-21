@@ -1,7 +1,5 @@
-
 import doctorModel from "../models/doctor_model.js";
 import consultationModel from "../models/consultation_model.js";
-import { fetchConversations } from "../utilities/conversation_utils.js";
 
 //Single method to get doctor profile as well as his consultation list
 export const getDoctor = async function (req, res) {
@@ -104,8 +102,6 @@ export const getStats = async function (req, res) {
     res.status(500).send({ success: false, message: err.message });
   }
 };
-
-export { fetchConversations } from "../utilities/conversation_utils.js";
 
 // export const createDoctor = async (req, res) => {
 //   try {
